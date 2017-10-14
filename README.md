@@ -11,4 +11,9 @@ Dmitry Arkhangelskiy (Дмитрий Архангельский)
 
 arhangeldim@otus.ru
 
+### Ученик
+Sergey Molokhov (Сергей Молохов)
+
+smolokhov@gmail.com
+
 
