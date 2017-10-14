@@ -22,6 +22,7 @@
             <artifactId>guava</artifactId>
             <version>${com.google.guava.version}</version>
         </dependency>
+
     </dependencies>
 
     <build>
@@ -61,6 +62,45 @@
                         </manifest>
                     </archive>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.wvengen</groupId>
+                <artifactId>proguard-maven-plugin</artifactId>
+                <version>2.0.8</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.sf.proguard</groupId>
+                        <artifactId>proguard-base</artifactId>
+                        <version>5.0</version>
+                        <scope>runtime</scope>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>obfuscation-packaging</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>proguard</goal>
+                        </goals>
+                        <configuration>
+                            <maxMemory>256m</maxMemory>
+                            <options>
+                                <option>-keep public class hw01.Main { public static void main(java.lang.String[]);}</option>
+                            </options>
+                            <injar>${project.build.finalName}.jar</injar>
+                            <outjar>${project.build.finalName}-small.jar</outjar>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                            <libs>
+                                <lib>${java.home}/lib/rt.jar</lib>
+                                <lib>${java.home}/lib/jce.jar</lib>
+                                <lib>${java.home}/lib/ext/sunjce_provider.jar</lib>
+                            </libs>
+                            <obfuscate>true</obfuscate>
+                            <attach>true</attach>
+                            <addMavenDescriptor>false</addMavenDescriptor>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
