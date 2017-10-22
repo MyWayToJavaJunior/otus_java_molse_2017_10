@@ -1,8 +1,9 @@
 package ru.otus.hw;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
+
+import static java.util.Arrays.asList;
 
 public class Main {
 
@@ -14,14 +15,14 @@ public class Main {
         stand.printSize(new Integer[0]);
         System.out.println("______List of int");
         stand.printSize(Collections.singletonList(1));
-        stand.printSize(Arrays.asList(1,2));
-        stand.printSize(Arrays.asList(1,2,3));
-        stand.printSize(Arrays.asList(1,2,3,4));
-        stand.printSize(Arrays.asList(1,2,3,4,5));
+        stand.printSize(asList(1,2));
+        stand.printSize(asList(1,2,3));
+        stand.printSize(asList(1,2,3,4));
+        stand.printSize(asList(1,2,3,4,5));
         System.out.println("_______List of String");
-        stand.printSize(Arrays.asList("I"));
-        stand.printSize(Arrays.asList("I","'ll"));
-        stand.printSize(Arrays.asList("I","'ll","back"));
+        stand.printSize(Collections.singletonList("I"));
+        stand.printSize(asList("I","'ll"));
+        stand.printSize(asList("I","'ll","back"));
 
         System.out.println("___________Big data from loop");
         Random randNumber = new Random();
