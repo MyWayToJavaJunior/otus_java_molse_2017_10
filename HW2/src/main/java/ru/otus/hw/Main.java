@@ -26,17 +26,28 @@ public class Main {
         System.out.println("___________Big data from loop");
         Random randNumber = new Random();
         while (true) {
-            int size = randNumber.nextInt(10_000_000);
+            int size = randNumber.nextInt(1_000_000);
             Object[] array = new Object[size];
             System.out.println("New array of size: " + array.length + " created");
             for (int i = 0; i < size; i++) {
-                array[i] = new Object();
+                array[i] = new MyData("pass" + size);
             }
-            stand.printSize(array);
             System.out.println("Created " + size + " objects.");
+            stand.printSize(array);
             Thread.sleep(2000); //wait for 1 sec
         }
 
+
+    }
+
+
+    private static class MyData{
+
+        private final String importantField;
+
+        public MyData(String importantField) {
+            this.importantField = importantField;
+        }
 
     }
 }
