@@ -2,9 +2,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import ru.otus.hw.MyArrayList;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 

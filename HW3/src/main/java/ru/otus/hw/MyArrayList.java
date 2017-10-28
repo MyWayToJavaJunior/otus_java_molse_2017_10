@@ -1,8 +1,16 @@
 package ru.otus.hw;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.ListIterator;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Comparator;
 
-public class MyArrayList<E extends Object> implements List<E>{
+import java.util.NoSuchElementException;
+import java.util.ConcurrentModificationException;
+
+public class MyArrayList<E extends Object> implements List<E> {
 
     Object[] arr;
 
