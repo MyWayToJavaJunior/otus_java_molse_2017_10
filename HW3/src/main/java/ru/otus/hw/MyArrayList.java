@@ -4,8 +4,7 @@ import java.util.*;
 
 public class MyArrayList<E extends Object> implements List<E>{
 
-    private Object[] arr;
-    transient Object[] elementData;
+    Object[] arr;
 
     private int size = 0;
     private final static int DEFAULT_CAPACITY = 10;
@@ -187,6 +186,12 @@ public class MyArrayList<E extends Object> implements List<E>{
         }
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public void sort(Comparator<? super E> c) {
+        Arrays.sort((E[]) arr, 0, size, c);
+    }
+
     private class ListItr extends Itr implements ListIterator<E> {
         ListItr(int index) {
             super();
@@ -215,7 +220,7 @@ public class MyArrayList<E extends Object> implements List<E>{
             int i = cursor - 1;
             if (i < 0)
                 throw new NoSuchElementException();
-            Object[] elementData = MyArrayList.this.elementData;
+            Object[] elementData = MyArrayList.this.arr;
             if (i >= elementData.length)
                 throw new ConcurrentModificationException();
             cursor = i;

@@ -12,6 +12,7 @@ public class TesterClass {
 
     private List<Integer> ints;
     private List<Integer> ints2;
+    private List<Integer> destination;
 
     @Before
     public void init(){
@@ -21,6 +22,10 @@ public class TesterClass {
         ints.add(2);
        ints2 = new MyArrayList<>();
 
+        destination = new MyArrayList<>();
+        destination.add(10);
+        destination.add(11);
+        destination.add(12);
     }
 
 
@@ -113,10 +118,29 @@ public class TesterClass {
     }
 
     @Test
-    public void chechSort(){
-        List<Integer> test = new ArrayList<>(Arrays.asList(5,3,2));
+    public void checkSort(){
         Collections.sort(ints,(a,b) -> a>=b ? 1: -1);
         Assert.assertEquals(Integer.valueOf(2),ints.get(0));
+    }
+
+    @Test
+    public void checkAddAll(){
+        Collections.addAll(ints,10,11,12);
+        Assert.assertEquals(6,ints.size());
+        Assert.assertEquals(Integer.valueOf(12),ints.get(5));
+    }
+
+    @Test
+    public void checkCopy(){
+        Collections.copy(destination,ints);
+        Assert.assertEquals(3,ints.size());
+        Assert.assertEquals(Integer.valueOf(5),ints.get(0));
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void checkCopyException(){
+        ints.add(11);
+        Collections.copy(destination,ints);
     }
 
 }
