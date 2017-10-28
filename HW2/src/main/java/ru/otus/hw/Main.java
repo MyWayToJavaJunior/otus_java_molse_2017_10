@@ -9,7 +9,7 @@ public class Main {
 
     public static void main(String... args) throws InterruptedException {
         EstimateStand<Object> stand = new EstimateStand<>();
-        stand.printSize("");
+       /* stand.printSize("");
         stand.printSize("Hello world");
         stand.printSize(new int[0]);
         stand.printSize(new Integer[0]);
@@ -36,7 +36,11 @@ public class Main {
             System.out.println("Created " + size + " objects.");
             stand.printSize(array);
             Thread.sleep(2000); //wait for 1 sec
-        }
+        }*/
+
+       SomeData some = new SomeData("Hello");
+        MyData data = new MyData(some);
+        stand.printSize(data);
 
 
     }
@@ -44,11 +48,19 @@ public class Main {
 
     private static class MyData{
 
-        private final String importantField;
+        private final SomeData someData;
 
-        public MyData(String importantField) {
-            this.importantField = importantField;
+        public MyData(SomeData someData) {
+            this.someData = someData;
         }
+    }
 
+    private static class SomeData {
+
+        private String some;
+
+        public SomeData(String some) {
+            this.some = some;
+        }
     }
 }
