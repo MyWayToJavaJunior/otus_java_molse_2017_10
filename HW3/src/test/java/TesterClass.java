@@ -140,4 +140,9 @@ public class TesterClass {
         Collections.copy(destination,ints);
     }
 
+    @Test
+    public void checkContainsTrueWithNew(){
+        Assert.assertEquals(true,ints.contains(new Integer(3)));
+    }
+
 }
