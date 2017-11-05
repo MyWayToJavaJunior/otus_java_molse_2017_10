@@ -1,8 +1,5 @@
 package ru.otus.hw;
 
-/**
- *
- */
 public class Main {
     private static final int THREAD_SLEEP = 10000;
 
