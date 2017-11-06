@@ -22,7 +22,7 @@ public class Leaker
 
         public Leak() {
 
-            data = new String[10000];
+            data = new String[1000];
             Arrays.fill(data, UUID.randomUUID().toString());
         }
     }
