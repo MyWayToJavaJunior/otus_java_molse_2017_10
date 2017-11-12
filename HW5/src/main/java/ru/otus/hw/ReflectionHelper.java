@@ -6,7 +6,6 @@ import ru.otus.hw.annotation.Before;
 import ru.otus.hw.annotation.Test;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -51,7 +50,7 @@ class ReflectionHelper {
         testAgregator.setListBefore(listBefore);
         testAgregator.setListTest(listTest);
         testAgregator.setListAfter(listAfter);
-        return new ArrayList<>(Arrays.asList(testAgregator));
+        return Arrays.asList(testAgregator);
     }
 
     public static List<TestAgregator> getAgregatorList(String packageName) throws IOException {
@@ -67,41 +66,6 @@ class ReflectionHelper {
         return agregators;
     }
 
-
-    static Object getFieldValue(Object object, String name) {
-        Field field = null;
-        boolean isAccessible = true;
-        try {
-            field = object.getClass().getDeclaredField(name); //getField() for public fields
-            isAccessible = field.isAccessible();
-            field.setAccessible(true);
-            return field.get(object);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        } finally {
-            if (field != null && !isAccessible) {
-                field.setAccessible(false);
-            }
-        }
-        return null;
-    }
-
-    static void setFieldValue(Object object, String name, Object value) {
-        Field field = null;
-        boolean isAccessible = true;
-        try {
-            field = object.getClass().getDeclaredField(name); //getField() for public fields
-            isAccessible = field.isAccessible();
-            field.setAccessible(true);
-            field.set(object, value);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        } finally {
-            if (field != null && !isAccessible) {
-                field.setAccessible(false);
-            }
-        }
-    }
 
     static Object callMethod(Object object, String name, Object... args) {
         Method method = null;
