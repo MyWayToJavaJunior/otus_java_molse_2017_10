@@ -31,7 +31,7 @@ class ReflectionHelper {
         return null;
     }
 
-    static <T> List<TestAgregator> getAgregatorList(Class<T> type) {
+    static <T> TestAgregator getAgregatorFromClass(Class<T> type) {
 
         List<Method> methods = Arrays.asList(type.getDeclaredMethods());
         TestAgregator testAgregator = new TestAgregator();
@@ -50,17 +50,17 @@ class ReflectionHelper {
         testAgregator.setListBefore(listBefore);
         testAgregator.setListTest(listTest);
         testAgregator.setListAfter(listAfter);
-        return Arrays.asList(testAgregator);
+        return testAgregator;
     }
 
-    public static List<TestAgregator> getAgregatorList(String packageName) throws IOException {
+    public static List<TestAgregator> getAgregatorsFromPackage(String packageName) throws IOException {
 
         List<TestAgregator> agregators = new ArrayList<>();
         final ClassLoader loader = Thread.currentThread().getContextClassLoader();
 
         ClassPath.from(loader).getTopLevelClasses().stream().filter(info -> info.getName().startsWith(packageName)).forEach(info -> {
             final Class<?> clazz = info.load();
-            agregators.add(getAgregatorList(clazz).get(0));
+            agregators.add(getAgregatorFromClass(clazz));
         });
 
         return agregators;
@@ -75,14 +75,13 @@ class ReflectionHelper {
             isAccessible = method.isAccessible();
             method.setAccessible(true);
             return method.invoke(object, args);
-        } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-            e.printStackTrace();
+        } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException | RuntimeException e) {
+            throw new RuntimeException(e);
         } finally {
             if (method != null && !isAccessible) {
                 method.setAccessible(false);
             }
         }
-        return null;
     }
 
     private static Class<?>[] toClasses(Object[] args) {
