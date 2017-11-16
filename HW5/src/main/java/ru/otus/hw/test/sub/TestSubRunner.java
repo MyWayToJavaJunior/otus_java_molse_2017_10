@@ -3,6 +3,7 @@ package ru.otus.hw.test.sub;
 import ru.otus.hw.annotation.After;
 import ru.otus.hw.annotation.Before;
 import ru.otus.hw.annotation.Test;
+import ru.otus.hw.engine.Assert;
 
 public class TestSubRunner {
 
@@ -13,12 +14,12 @@ public class TestSubRunner {
 
     @Test
     public void testFirst(){
-        System.out.println("sub testFirst");
+        Assert.assertTrue(false);
     }
 
     @Test
     public void testsecond(){
-        System.out.println("sub testsecond");
+        Assert.assertTrue(true);
     }
 
     @Test

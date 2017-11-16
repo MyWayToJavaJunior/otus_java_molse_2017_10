@@ -1,9 +1,11 @@
-package ru.otus.hw;
+package ru.otus.hw.utils;
 
 import com.google.common.reflect.ClassPath;
+import ru.otus.hw.engine.TestAgregator;
 import ru.otus.hw.annotation.After;
 import ru.otus.hw.annotation.Before;
 import ru.otus.hw.annotation.Test;
+import ru.otus.hw.exception.AssertRuntimeException;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -14,11 +16,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("SameParameterValue")
-class ReflectionHelper {
+public class ReflectionHelper {
     private ReflectionHelper() {
     }
 
-    static <T> T instantiate(Class<T> type, Object... args) {
+    public static <T> T instantiate(Class<T> type, Object... args) {
         try {
             if (args.length == 0) {
                 return type.newInstance();
@@ -31,7 +33,7 @@ class ReflectionHelper {
         return null;
     }
 
-    static <T> TestAgregator getAgregatorFromClass(Class<T> type) {
+    public static <T> TestAgregator getAgregatorFromClass(Class<T> type) {
 
         List<Method> methods = Arrays.asList(type.getDeclaredMethods());
         TestAgregator testAgregator = new TestAgregator();
@@ -67,7 +69,7 @@ class ReflectionHelper {
     }
 
 
-    static Object callMethod(Object object, String name, Object... args) {
+    public static Object callMethod(Object object, String name, Object... args) {
         Method method = null;
         boolean isAccessible = true;
         try {
@@ -75,8 +77,8 @@ class ReflectionHelper {
             isAccessible = method.isAccessible();
             method.setAccessible(true);
             return method.invoke(object, args);
-        } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException | RuntimeException e) {
-            throw new RuntimeException(e);
+        } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException | AssertRuntimeException e) {
+                throw new RuntimeException(e);
         } finally {
             if (method != null && !isAccessible) {
                 method.setAccessible(false);
