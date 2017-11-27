@@ -1,6 +1,5 @@
 package ru.otus.hw.service;
 
-import one.util.streamex.StreamEx;
 import ru.otus.hw.interfaces.AtmService;
 import ru.otus.hw.model.Atm;
 import ru.otus.hw.model.AtmCell;
@@ -8,7 +7,6 @@ import ru.otus.hw.model.AtmCell;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class AtmServiceImpl implements AtmService{
@@ -30,24 +28,23 @@ public class AtmServiceImpl implements AtmService{
 
     @Override
     public String giveMoney(int money) {
-        int finalMoney = money;
         List<AtmCell> atmCells = atm.getAtmCells().stream().filter(cell->cell.getCount()>0).collect(Collectors.toList());
         Collections.sort(atmCells);
         List<AtmCell> resultAtmCells = new ArrayList<>();
         for (AtmCell atmCell: atmCells) {
-            int i = money / atmCell.getNominal();
-            if (i> atmCell.getCount()) i = atmCell.getCount();
-            resultAtmCells.add(new AtmCell(atmCell.getNominal(),i));
-            money = money - i* atmCell.getNominal();
-            atmCell.descreaseCount(i);
+            int count = money / atmCell.getNominal();
+            if (count > atmCell.getCount()) count = atmCell.getCount();
+            resultAtmCells.add(new AtmCell(atmCell.getNominal(),count));
+            money = money - count* atmCell.getNominal();
+            atmCell.descreaseCount(count);
         }
         if (money != 0) return "Выдача невозможна";
-        return resultAtmCells.toString();
+        return "Выданы:" + resultAtmCells.stream().filter(t->t.getCount() != 0).collect(Collectors.toList()).toString();
     }
 
     @Override
     public String showBalance() {
         int sum = atm.getAtmCells().stream().mapToInt(cell -> cell.getCount() * cell.getNominal()).sum();
-        return "" + sum;
+        return "Текущий баланс: " + sum;
     }
 }

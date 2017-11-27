@@ -10,7 +10,7 @@ public class Main {
         System.out.println(atm.showBalance());
         atm.putMoney(1000);
         System.out.println(atm.showBalance());
-        System.out.println(atm.giveMoney(15000));
+        System.out.println(atm.giveMoney(1500));
         System.out.println(atm.showBalance());
     }
 }

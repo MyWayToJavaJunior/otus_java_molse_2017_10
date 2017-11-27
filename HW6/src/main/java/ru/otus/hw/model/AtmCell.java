@@ -22,10 +22,7 @@ public class AtmCell implements Comparable{
 
         @Override
         public String toString() {
-                return "AtmCell{" +
-                        "nominal=" + nominal +
-                        ", count=" + count +
-                        '}';
+                return count+ "x"+ nominal;
         }
 
         @Override
