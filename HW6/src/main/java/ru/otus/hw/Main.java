@@ -1,12 +1,13 @@
 package ru.otus.hw;
 
+import ru.otus.hw.interfaces.AtmService;
 import ru.otus.hw.service.AtmServiceImpl;
 
 public class Main {
 
     public static void main(final String... args) {
 
-        AtmServiceImpl atm = new AtmServiceImpl();
+        AtmService atm = new AtmServiceImpl();
         System.out.println(atm.showBalance());
         try {
             atm.putMoney(1100);

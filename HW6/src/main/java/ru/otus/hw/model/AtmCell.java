@@ -3,7 +3,7 @@ package ru.otus.hw.model;
 import lombok.Data;
 
 @Data
-public class AtmCell implements Comparable{
+public class AtmCell{
         private int nominal;
         private int count;
 
@@ -23,12 +23,5 @@ public class AtmCell implements Comparable{
         @Override
         public String toString() {
                 return count+ "x"+ nominal;
-        }
-
-        @Override
-        public int compareTo(Object o) {
-                if (this.getNominal()> ((AtmCell) o).getNominal()) return -1;
-                else if (this.getNominal()< ((AtmCell) o).getNominal()) return 1;
-                return 0;
         }
 }

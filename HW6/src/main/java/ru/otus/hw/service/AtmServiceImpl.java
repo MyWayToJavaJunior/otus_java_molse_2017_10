@@ -7,6 +7,7 @@ import ru.otus.hw.model.AtmCell;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,7 +32,13 @@ public class AtmServiceImpl implements AtmService{
     @Override
     public String giveMoney(int money) {
         List<AtmCell> atmCells = atm.getAtmCells().stream().filter(cell->cell.getCount()>0).collect(Collectors.toList());
-        Collections.sort(atmCells);
+        Collections.sort(atmCells, (o1, o2) -> {
+            if (o1.getNominal()> o2.getNominal()) return -1;
+            else if (o1.getNominal()< o2.getNominal()) return 1;
+            return 0;
+        });
+
+
         List<AtmCell> resultAtmCells = new ArrayList<>();
         for (AtmCell atmCell: atmCells) {
             int count = money / atmCell.getNominal();
