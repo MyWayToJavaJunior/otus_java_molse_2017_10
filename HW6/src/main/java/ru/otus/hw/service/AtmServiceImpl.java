@@ -1,5 +1,6 @@
 package ru.otus.hw.service;
 
+import ru.otus.hw.NoSuchMoneyNominal;
 import ru.otus.hw.interfaces.AtmService;
 import ru.otus.hw.model.Atm;
 import ru.otus.hw.model.AtmCell;
@@ -21,8 +22,9 @@ public class AtmServiceImpl implements AtmService{
     }
 
     @Override
-    public void putMoney(int money) {
-        AtmCell atmCell = atm.getAtmCells().stream().filter(cell -> cell.getNominal() == money).findFirst().orElseThrow(() -> new RuntimeException());
+    public void putMoney(int money) throws NoSuchMoneyNominal {
+        AtmCell atmCell = atm.getAtmCells().stream().filter(cell -> cell.getNominal() == money).findFirst()
+                .orElseThrow(() -> new NoSuchMoneyNominal("Банкомат не принимает купюры номинала: "+ money));
         atmCell.increaseCount(1);
     }
 

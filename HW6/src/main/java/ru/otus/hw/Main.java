@@ -8,7 +8,11 @@ public class Main {
 
         AtmServiceImpl atm = new AtmServiceImpl();
         System.out.println(atm.showBalance());
-        atm.putMoney(1000);
+        try {
+            atm.putMoney(1100);
+        } catch (NoSuchMoneyNominal e) {
+            System.out.println(e.toString());
+        }
         System.out.println(atm.showBalance());
         System.out.println(atm.giveMoney(1500));
         System.out.println(atm.showBalance());
