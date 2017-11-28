@@ -1,4 +1,4 @@
-package ru.otus.hw;
+package ru.otus.hw.exception;
 
 public class NoSuchMoneyNominal extends Exception {
 

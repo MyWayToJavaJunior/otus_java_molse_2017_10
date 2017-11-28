@@ -1,14 +1,11 @@
 package ru.otus.hw.service;
 
-import ru.otus.hw.NoSuchMoneyNominal;
+import ru.otus.hw.exception.NoSuchMoneyNominal;
 import ru.otus.hw.interfaces.AtmService;
 import ru.otus.hw.model.Atm;
 import ru.otus.hw.model.AtmCell;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class AtmServiceImpl implements AtmService{
@@ -23,7 +20,7 @@ public class AtmServiceImpl implements AtmService{
     }
 
     @Override
-    public void putMoney(int money) throws NoSuchMoneyNominal {
+    public void putOneNominal(int money) throws NoSuchMoneyNominal {
         AtmCell atmCell = atm.getAtmCells().stream().filter(cell -> cell.getNominal() == money).findFirst()
                 .orElseThrow(() -> new NoSuchMoneyNominal("Банкомат не принимает купюры номинала: "+ money));
         atmCell.increaseCount(1);
@@ -38,17 +35,22 @@ public class AtmServiceImpl implements AtmService{
             return 0;
         });
 
-
-        List<AtmCell> resultAtmCells = new ArrayList<>();
+        Map<Integer,Integer> nominalCountMap = new HashMap<>();
         for (AtmCell atmCell: atmCells) {
             int count = money / atmCell.getNominal();
-            if (count > atmCell.getCount()) count = atmCell.getCount();
-            resultAtmCells.add(new AtmCell(atmCell.getNominal(),count));
+            if (count > atmCell.getCount()) { count = atmCell.getCount(); }
+            nominalCountMap.put(atmCell.getNominal(),count);
             money = money - count* atmCell.getNominal();
-            atmCell.descreaseCount(count);
         }
         if (money != 0) return "Выдача невозможна";
-        return "Выданы:" + resultAtmCells.stream().filter(t->t.getCount() != 0).collect(Collectors.toList()).toString();
+        atmCells.forEach(atmCell -> {
+            if (nominalCountMap.containsKey(atmCell.getNominal())) {
+                atmCell.descreaseCount(nominalCountMap.get(atmCell.getNominal()));
+            }
+        });
+        return nominalCountMap.entrySet().stream().filter(map -> map.getValue() != 0)
+                .map(map -> map.getValue() + "x" + map.getKey()).collect(Collectors.joining(","));
+
     }
 
     @Override

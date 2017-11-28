@@ -1,10 +1,10 @@
 package ru.otus.hw.interfaces;
 
-import ru.otus.hw.NoSuchMoneyNominal;
+import ru.otus.hw.exception.NoSuchMoneyNominal;
 
 public interface AtmService {
 
-    void putMoney(int money) throws NoSuchMoneyNominal;
+    void putOneNominal(int money) throws NoSuchMoneyNominal;
     String giveMoney(int money);
     String showBalance();
 }
