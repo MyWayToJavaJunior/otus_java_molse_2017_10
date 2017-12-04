@@ -11,12 +11,20 @@ import java.util.stream.Collectors;
 public class AtmServiceImpl implements AtmService{
 
     private Atm atm;
+    private static volatile AtmServiceImpl instance;
 
-    public AtmServiceImpl(Atm atm) {
-        /*List<AtmCell> atmCells = new ArrayList<>();
-        atmCells.add(new AtmCell(1000,10));
-        atmCells.add(new AtmCell(500,10));
-        atm = new Atm(atmCells);*/
+    private AtmServiceImpl() {}
+
+    public static AtmServiceImpl getInstance() {
+        if (instance == null)
+            synchronized (AtmServiceImpl.class) {
+            if (instance == null)
+                instance = new AtmServiceImpl();
+            }
+        return instance;
+    }
+
+    public void setAtm(Atm atm) {
         this.atm = atm;
     }
 
@@ -49,7 +57,7 @@ public class AtmServiceImpl implements AtmService{
                 atmCell.descreaseCount(nominalCountMap.get(atmCell.getNominal()));
             }
         });
-        return nominalCountMap.entrySet().stream().filter(map -> map.getValue() != 0)
+        return "Выдача: " + nominalCountMap.entrySet().stream().filter(map -> map.getValue() != 0)
                 .map(map -> map.getValue() + "x" + map.getKey()).collect(Collectors.joining(","));
 
     }

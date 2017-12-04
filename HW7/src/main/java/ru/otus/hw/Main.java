@@ -1,7 +1,6 @@
 package ru.otus.hw;
 
 import ru.otus.hw.exception.NoSuchMoneyNominal;
-import ru.otus.hw.exception.NotFoundRestoredAtm;
 import ru.otus.hw.interfaces.AtmService;
 import ru.otus.hw.model.Atm;
 import ru.otus.hw.model.AtmCell;
@@ -10,19 +9,21 @@ import ru.otus.hw.service.AtmServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Main {
 
     public static void main(final String... args) {
 
-        Atm atm = new Atm(createRandomAtmCells());
+        Atm atmFirst = new Atm(createRandomAtmCells());
         Atm atmSecond = new Atm(createRandomAtmCells());
         AtmDepartment atmDep = new AtmDepartment();
-        atmDep.addAtm(atm);
+        atmDep.addAtm(atmFirst);
         atmDep.addAtm(atmSecond);
         System.out.println("Текущий баланс всех банкоматов " + atmDep.getSummaryBalance());
 
-        AtmService atmService = new AtmServiceImpl(atm);
+        AtmService atmService = AtmServiceImpl.getInstance();
+        atmService.setAtm(atmFirst);
         System.out.println("Текущий баланс " + atmService.getBalance());
         try {
             atmService.putOneNominal(3000);
@@ -34,13 +35,15 @@ public class Main {
         System.out.println("Текущий баланс " + atmService.getBalance());
         System.out.println(atmService.giveMoney(2000));
         System.out.println("Текущий баланс " + atmService.getBalance());
-        try {
-            atmDep.restoreAtmState(atm);
-        } catch (NotFoundRestoredAtm e) {
-            System.out.println(e.toString());
-        }
+        atmService.setAtm(atmSecond);
+        System.out.println(atmService.giveMoney(6700));
+        System.out.println(atmService.giveMoney(1500));
+        System.out.println(atmService.giveMoney(10000));
         System.out.println("Текущий баланс " + atmService.getBalance());
-        System.out.println(atmService.giveMoney(2000));
+        atmDep.restoreAtmsState();
+        System.out.println("Текущий баланс всех банкоматов " + atmDep.getSummaryBalance());
+        System.out.println("Текущий баланс " + atmService.getBalance());
+        System.out.println(atmService.giveMoney(5500));
         System.out.println("Текущий баланс всех банкоматов " + atmDep.getSummaryBalance());
 
 
@@ -48,8 +51,16 @@ public class Main {
 
     private static List<AtmCell> createRandomAtmCells() {
         List<AtmCell> cells = new ArrayList<>();
-        cells.add(new AtmCell(1000,10));
-        cells.add(new AtmCell(500,10));
+        cells.add(new AtmCell(5000,random()));
+        cells.add(new AtmCell(1000,random()));
+        cells.add(new AtmCell(500,random()));
+        cells.add(new AtmCell(50,random()));
         return cells;
     }
+
+    private static int random() {
+        return ThreadLocalRandom.current().nextInt(1,20);
+    }
+
+
 }

@@ -1,6 +1,6 @@
 package ru.otus.hw.model;
 
-import ru.otus.hw.exception.NotFoundRestoredAtm;
+import ru.otus.hw.interfaces.AtmService;
 import ru.otus.hw.service.AtmServiceImpl;
 
 import java.io.*;
@@ -32,7 +32,11 @@ public class AtmDepartment {
 
 
 
-    public Atm restoreAtmState(Atm atm) throws NotFoundRestoredAtm {
+    public void restoreAtmsState() {
+        atms.forEach(this::restoreSingleAtmState);
+    }
+
+    private void restoreSingleAtmState(Atm atm) {
         Atm atmRestored = null;
         try {
             FileInputStream fileIn = new FileInputStream("/tmp/"+atm.getUuid()+".cer");
@@ -52,18 +56,21 @@ public class AtmDepartment {
                     .filter(a -> a.getUuid().equals(finalAtmRestored.getUuid()))
                     .findFirst();
             if (atmOptional.isPresent()){
-            atmOptional.get().setAtmCells(atmRestored.getAtmCells());
-                System.out.println("Восстановление банкомата завершено");
+                atmOptional.get().setAtmCells(atmRestored.getAtmCells());
+                System.out.println("Восстановление банкомата " +atm.getUuid()+ " завершено");
             }
             else {
-                throw new NotFoundRestoredAtm("Восстановление банкомата не возможно");
+                System.out.println("Восстановление банкомата " +atm.getUuid()+ "не возможно");
             }
 
         }
-        return atmRestored;
     }
 
     public int getSummaryBalance() {
-        return atms.stream().map(AtmServiceImpl::new).map(AtmServiceImpl::getBalance).mapToInt(Integer::valueOf).sum();
+        return atms.stream().map(atm -> {
+            AtmService instance = AtmServiceImpl.getInstance();
+            instance.setAtm(atm);
+            return instance.getBalance();
+        }).mapToInt(Integer::valueOf).sum();
     }
 }
