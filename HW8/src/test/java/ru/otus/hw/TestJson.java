@@ -36,6 +36,12 @@ public class TestJson {
         String jsonStr = parser.toJson(arr);
         Assert.assertEquals("[5,5,5,5,5]",jsonStr);
     }
+    @Test public void objectArrayTest() throws IllegalAccessException {
+        Message[] arr = new Message[2];
+        Arrays.fill(arr,new Message("Hi"));
+        String jsonStr = parser.toJson(arr);
+        Assert.assertEquals("[{\"message\":\"Hi\"},{\"message\":\"Hi\"}]",jsonStr);
+    }
 
     @Test public void arrayListMessageTest() throws IllegalAccessException {
         List<Message> lists = new ArrayList<>(Arrays.asList(new Message("Hello1"),new Message("Hello2")));
