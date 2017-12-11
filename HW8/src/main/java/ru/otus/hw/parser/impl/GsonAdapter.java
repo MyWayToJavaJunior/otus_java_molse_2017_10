@@ -1,6 +1,7 @@
-package ru.otus.hw.parser;
+package ru.otus.hw.parser.impl;
 
 import com.google.gson.Gson;
+import ru.otus.hw.parser.JsonParser;
 
 public class GsonAdapter implements JsonParser {
 

@@ -1,4 +1,6 @@
-package ru.otus.hw.parser;
+package ru.otus.hw.parser.impl;
+
+import ru.otus.hw.parser.JsonParser;
 
 public class SimpleJsonAdapter implements JsonParser {
 

@@ -1,8 +1,7 @@
 package ru.otus.hw.factory;
 
-import ru.otus.hw.parser.GsonAdapter;
+import ru.otus.hw.parser.impl.GsonAdapter;
 import ru.otus.hw.parser.JsonParser;
-import ru.otus.hw.parser.SimpleJsonAdapter;
 
 public class GsonFactory extends Factory {
 
