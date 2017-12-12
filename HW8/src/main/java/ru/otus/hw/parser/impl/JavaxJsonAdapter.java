@@ -6,6 +6,7 @@ import ru.otus.hw.parser.JsonParser;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
@@ -40,24 +41,20 @@ public class JavaxJsonAdapter implements JsonParser {
 
         Class<?> componentType = t.getClass().getComponentType();
         if (componentType.equals(Integer.TYPE)) {
-            int[] array =  (int[]) t;
-            for (int i = 0; i < array.length ; i++) {
-                jsonArrayBuilder.add(array[i]);
+            for (int i = 0; i < Array.getLength(t) ; i++) {
+                jsonArrayBuilder.add((int)Array.get(t,i));
             }
         } else if (componentType.equals(Float.TYPE)) {
-            float[] array =  (float[]) t;
-            for (int i = 0; i < array.length ; i++) {
-                jsonArrayBuilder.add(array[i]);
+            for (int i = 0; i < Array.getLength(t) ; i++) {
+                jsonArrayBuilder.add((float)Array.get(t,i));
             }
         } else if (componentType.equals(Double.TYPE)) {
-            double[] array =  (double []) t;
-            for (int i = 0; i < array.length ; i++) {
-                jsonArrayBuilder.add(array[i]);
+            for (int i = 0; i < Array.getLength(t) ; i++) {
+                jsonArrayBuilder.add((double)Array.get(t,i));
             }
         } else if (componentType.equals(Boolean.TYPE)) {
-            boolean[] array =  (boolean []) t;
-            for (int i = 0; i < array.length ; i++) {
-                jsonArrayBuilder.add(array[i]);
+            for (int i = 0; i < Array.getLength(t) ; i++) {
+                jsonArrayBuilder.add((boolean)Array.get(t,i));
             }
         }
     }
