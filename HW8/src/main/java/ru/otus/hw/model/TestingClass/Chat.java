@@ -5,9 +5,17 @@ import java.util.List;
 public class Chat {
 
     private List<Message> messages;
-    private Participants[] paricipants;
+    private Participant[] paricipants;
 
-    public Chat(List<Message> messages, Participants[] paricipants) {
+    public Chat(List<Message> messages) {
+        this.messages = messages;
+    }
+
+    public Chat(Participant[] paricipants) {
+        this.paricipants = paricipants;
+    }
+
+    public Chat(List<Message> messages, Participant[] paricipants) {
         this.messages = messages;
         this.paricipants = paricipants;
     }
@@ -20,11 +28,11 @@ public class Chat {
         this.messages = messages;
     }
 
-    public Participants[] getParicipants() {
+    public Participant[] getParicipants() {
         return paricipants;
     }
 
-    public void setParicipants(Participants[] paricipants) {
+    public void setParicipants(Participant[] paricipants) {
         this.paricipants = paricipants;
     }
 }

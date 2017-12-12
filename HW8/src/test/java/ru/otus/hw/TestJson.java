@@ -7,12 +7,12 @@ import org.junit.Test;
 import ru.otus.hw.factory.JavaxJsonFactory;
 import ru.otus.hw.model.TestingClass.Chat;
 import ru.otus.hw.model.TestingClass.Message;
-import ru.otus.hw.factory.GsonFactory;
-import ru.otus.hw.model.TestingClass.Participants;
+import ru.otus.hw.model.TestingClass.Participant;
 import ru.otus.hw.parser.JsonParser;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class TestJson {
     private JsonParser parser;
@@ -77,22 +77,21 @@ public class TestJson {
 
     @Test public void chatComplexTest() throws IllegalAccessException {
         List<Message> lists = new ArrayList<>(Arrays.asList(new Message("Hello1"),new Message("Hello2")));
-        Participants[] participantses = new Participants[2];
-        participantses[0] = new Participants(17,"Ivan",true,"Dubolom");
-        participantses[1] = new Participants(23,"Lera",false,"Dyrka");
+        Participant[] participantses = new Participant[2];
+        participantses[0] = new Participant(17,"Ivan",true,"Dubolom");
+        participantses[1] = new Participant(23,"Lera",false,"Dyrka");
         Chat chat = new Chat(lists,participantses);
         String jsonStr = parser.toJson(chat);
         System.out.println(jsonStr);
-       // Assert.assertTrue(jsonStr.contains("\"paricipants\":[{\""));
-     //   Assert.assertTrue(jsonStr.contains("\"isMale\":false"));
+        Assert.assertTrue(jsonStr.contains("\"paricipants\":[{\""));
+        Assert.assertTrue(jsonStr.contains("\"isMale\":false"));
         Gson gson = new Gson();
         System.out.println(gson.toJson(chat));
         Chat chatRestored = gson.fromJson(jsonStr, Chat.class);
-        /*Assert.assertEquals(chatRestored.getParicipants().length,2);
+        Assert.assertEquals(chatRestored.getParicipants().length,2);
         Assert.assertEquals(chatRestored.getMessages().size(),2);
         Assert.assertEquals(chatRestored.getMessages().get(0).getMessage(),"Hello1");
         Assert.assertEquals(chatRestored.getParicipants()[1].getNickName(),"Dyrka");
-        Assert.assertEquals(chatRestored,chat);*/
     }
 
 }

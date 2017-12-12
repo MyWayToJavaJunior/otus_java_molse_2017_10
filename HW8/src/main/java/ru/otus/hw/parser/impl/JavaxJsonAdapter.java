@@ -3,26 +3,25 @@ package ru.otus.hw.parser.impl;
 import org.apache.commons.lang3.ClassUtils;
 import ru.otus.hw.parser.JsonParser;
 
-import javax.json.*;
-import java.io.StringWriter;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
 public class JavaxJsonAdapter implements JsonParser {
 
     @Override
     public <T> String toJson(T t) throws IllegalAccessException {
-
         if (getClassType(t) == ClassType.Array || getClassType(t) == ClassType.Collection){
-            return writeToString(prepareArray(t).build());
-        } else if (getClassType(t) == ClassType.String)
-            return t.toString();
-        else {
-            return writeToString(getJsonObject(t));
+            return prepareArray(t).build().toString();
+        } else {
+            return getJsonObject(t).build().toString();
         }
-
 
     }
 
@@ -36,37 +35,6 @@ public class JavaxJsonAdapter implements JsonParser {
         }
         return jsonBuilder;
     }
-
-    private <T> void makeComplexArray(T t, JsonArrayBuilder jsonBuilder) throws IllegalAccessException {
-        if (getClassType(t) == ClassType.Collection) {
-            for (Object obj : ((Collection<Object>) t)) {
-                jsonBuilder.add(getJsonObject(obj));
-            }
-            return;
-        }
-        Object[] t1 = (Object[]) t;
-        for (Object obj:t1) {
-            jsonBuilder.add(getJsonObject(obj));
-        }
-    }
-
-    private <T>JsonObject getJsonObject(T obj) throws IllegalAccessException {
-        JsonObjectBuilder builder = Json.createObjectBuilder();
-
-        Class<?> aClass = obj.getClass();
-        Field[] declaredFields = aClass.getDeclaredFields();
-        for (Field field: declaredFields) {
-            String fName = field.getName();
-            field.setAccessible(true);
-            Object value = field.get(obj);
-            if (value instanceof String) {
-                builder.add(fName,value.toString());
-            } else
-            builder.add(fName,toJson(value));
-        }
-        return builder.build();
-    }
-
 
     private <T> void makePrimitiveArray(T t,JsonArrayBuilder jsonArrayBuilder){
 
@@ -94,6 +62,56 @@ public class JavaxJsonAdapter implements JsonParser {
         }
     }
 
+    private <T> void makeComplexArray(T t, JsonArrayBuilder jsonBuilder) throws IllegalAccessException {
+        if (getClassType(t) == ClassType.Collection) {
+            for (Object obj : ((Collection<Object>) t)) {
+                jsonBuilder.add(getJsonObject(obj));
+            }
+            return;
+        }
+        Object[] t1 = (Object[]) t;
+        for (Object obj:t1) {
+            jsonBuilder.add(getJsonObject(obj));
+        }
+    }
+
+    private <T>JsonObjectBuilder getJsonObject(T obj) throws IllegalAccessException {
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+
+
+        List<Field> declaredFields = getFields(obj);
+        for (Field field: declaredFields) {
+            String fName = field.getName();
+            field.setAccessible(true);
+            Object value = field.get(obj);
+            if (value == null) continue;
+            else if (value instanceof String) {
+                builder.add(fName,value.toString());
+            } else if (value instanceof Boolean) {
+                builder.add(fName,(Boolean) value);
+            } else if (getClassType(value) == ClassType.Array || getClassType(value) == ClassType.Collection) {
+                builder.add(fName,prepareArray(value));
+            } else if (value instanceof Integer || value instanceof Byte || value instanceof Short ) {
+                builder.add(fName, (int) value);
+            } else if (value instanceof Double || value instanceof Float ) {
+                builder.add(fName, (double)value);
+            }
+            else
+                builder.add(fName,getJsonObject(value));
+        }
+        return builder;
+    }
+
+    private <T> List<Field> getFields(T t) {
+        List<Field> fields = new ArrayList<>();
+        Class clazz = t.getClass();
+        while (clazz != Object.class) {
+            fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
+            clazz = clazz.getSuperclass();
+        }
+        return fields;
+    }
+
     private <T> ClassType getClassType(T t) {
         if (t.getClass().isArray()) return ClassType.Array;
             else if (ClassUtils.isPrimitiveOrWrapper(t.getClass())) return ClassType.Primitive;
@@ -105,27 +123,8 @@ public class JavaxJsonAdapter implements JsonParser {
 
 
 
-    private static enum ClassType {
+    private enum ClassType {
         Primitive, Array, Collection,Map, Object, String
-    }
-
-
-    private static String writeToString(JsonObject jsonst) {
-        StringWriter stWriter = new StringWriter();
-        try (JsonWriter jsonWriter = Json.createWriter(stWriter)) {
-            jsonWriter.writeObject(jsonst);
-        }
-
-        return stWriter.toString();
-    }
-
-    private static String writeToString(JsonArray jsonst) {
-        StringWriter stWriter = new StringWriter();
-        try (JsonWriter jsonWriter = Json.createWriter(stWriter)) {
-            jsonWriter.writeArray(jsonst);
-        }
-
-        return stWriter.toString();
     }
 
 }

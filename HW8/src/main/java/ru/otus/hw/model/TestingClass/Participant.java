@@ -1,10 +1,10 @@
 package ru.otus.hw.model.TestingClass;
 
-public class Participants extends People {
+public class Participant extends People {
 
     private String nickName;
 
-    public Participants(int age, String name, boolean isMale, String nickName) {
+    public Participant(int age, String name, boolean isMale, String nickName) {
         super(age, name, isMale);
         this.nickName = nickName;
     }
