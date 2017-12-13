@@ -1,6 +1,6 @@
 package ru.otus.hw.factory;
 
-import ru.otus.hw.parser.impl.SimpleJsonAdapter;
+import ru.otus.hw.parser.impl.SimpleJsonParser;
 import ru.otus.hw.parser.JsonParser;
 public class SimpleJsonFactory extends Factory {
 
@@ -17,6 +17,6 @@ public class SimpleJsonFactory extends Factory {
 
     @Override
     public JsonParser createParser() {
-        return new SimpleJsonAdapter();
+        return new SimpleJsonParser();
     }
 }

@@ -1,6 +1,6 @@
 package ru.otus.hw.factory;
 
-import ru.otus.hw.parser.impl.GsonAdapter;
+import ru.otus.hw.parser.impl.GsonParser;
 import ru.otus.hw.parser.JsonParser;
 
 public class GsonFactory extends Factory {
@@ -18,6 +18,6 @@ public class GsonFactory extends Factory {
 
     @Override
     public JsonParser createParser() {
-        return new GsonAdapter();
+        return new GsonParser();
     }
 }

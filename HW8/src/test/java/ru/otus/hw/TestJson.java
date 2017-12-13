@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import ru.otus.hw.factory.JavaxJsonFactory;
+import ru.otus.hw.model.TestingClass.BagOfPrimitives;
 import ru.otus.hw.model.TestingClass.Chat;
 import ru.otus.hw.model.TestingClass.Message;
 import ru.otus.hw.model.TestingClass.Participant;
@@ -92,6 +93,22 @@ public class TestJson {
         Assert.assertEquals(chatRestored.getMessages().size(),2);
         Assert.assertEquals(chatRestored.getMessages().get(0).getMessage(),"Hello1");
         Assert.assertEquals(chatRestored.getParicipants()[1].getNickName(),"Dyrka");
+    }
+
+
+    @Test public void testBagOfPrimitives() throws IllegalAccessException {
+        BagOfPrimitives bag = new BagOfPrimitives();
+        String bagJson = parser.toJson(bag);
+        Gson gson = new Gson();
+        BagOfPrimitives bagRestored = gson.fromJson(bagJson, BagOfPrimitives.class);
+        Assert.assertEquals(bag.getaByte(),bagRestored.getaByte());
+        Assert.assertEquals(bag.getaShort(),bagRestored.getaShort());
+        Assert.assertEquals(bag.getaLong(),bagRestored.getaLong());
+        Assert.assertEquals(bag.getAnInt(),bagRestored.getAnInt());
+        Assert.assertEquals(bag.getaFloat(),bagRestored.getaFloat(),0.1);
+        Assert.assertEquals(bag.getaDouble(),bagRestored.getaDouble(),0.1);
+        Assert.assertEquals(bag.getaChar(),bagRestored.getaChar());
+        Assert.assertEquals(bag.isaBoolean(),bagRestored.isaBoolean());
     }
 
 }

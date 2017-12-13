@@ -20,12 +20,20 @@ public class Main {
         Participant user = new Participant(25,"Vasya",true,"TTTT");
         participantses[0] = user;
         Chat chat = new Chat(lists,participantses);
-        String jsonStr = parser.toJson(chat);
-        System.out.println(jsonStr);
-
         Gson gson = new Gson();
-        System.out.println(gson.toJson(chat));
+        System.out.println(gson.toJson(123));
+        System.out.println(gson.toJson(123.0d));
+        System.out.println(gson.toJson("abc"));
+        System.out.println(gson.toJson('c'));
+        System.out.println(gson.toJson(null));
+        System.out.println(gson.toJson(true));
 
+        System.out.println(parser.toJson(123));
+        System.out.println(parser.toJson(123.0d));
+        System.out.println(parser.toJson("abc"));
+        System.out.println(parser.toJson('c'));
+        System.out.println(parser.toJson(null));
+        System.out.println(parser.toJson(true));
 
     }
 

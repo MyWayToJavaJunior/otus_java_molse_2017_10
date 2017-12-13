@@ -1,11 +1,13 @@
 package ru.otus.hw.parser.impl;
 
 import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import ru.otus.hw.parser.JsonParser;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
+import javax.json.JsonString;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -14,16 +16,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
 
-public class JavaxJsonAdapter implements JsonParser {
+public class JavaxJsonParser implements JsonParser {
 
     @Override
     public <T> String toJson(T t) throws IllegalAccessException {
-        if (getClassType(t) == ClassType.Array || getClassType(t) == ClassType.Collection){
+        if (t == null) return "null";
+        else if (getClassType(t) == ClassType.Array || getClassType(t) == ClassType.Collection){
             return prepareArray(t).build().toString();
-        } else {
+        } else  if (ClassUtils.isPrimitiveOrWrapper(t.getClass()) || t instanceof String){
+            return prepatePrimitives(t);
+        }
+        else {
             return getJsonObject(t).build().toString();
         }
 
+    }
+
+    private <T> String prepatePrimitives(T t) {
+        if (t instanceof Number) return String.valueOf((Number) t);
+        if (t instanceof String || t instanceof Character) {
+            JsonString value = Json.createValue(t.toString());
+            return value.toString();
+        }
+        if (t instanceof Boolean) return ((Boolean) t).toString();
+        else throw new RuntimeException("Not accepted yet");
     }
 
     private <T> JsonArrayBuilder prepareArray(T t) throws IllegalAccessException {
@@ -81,17 +97,16 @@ public class JavaxJsonAdapter implements JsonParser {
             String fName = field.getName();
             field.setAccessible(true);
             Object value = field.get(obj);
-            if (value == null) continue;
-            else if (value instanceof String) {
+            if (value == null) {
+                builder.add(fName,"null");
+            } else if (value instanceof String || value instanceof Character) {
                 builder.add(fName,value.toString());
             } else if (value instanceof Boolean) {
                 builder.add(fName,(Boolean) value);
             } else if (getClassType(value) == ClassType.Array || getClassType(value) == ClassType.Collection) {
                 builder.add(fName,prepareArray(value));
-            } else if (value instanceof Integer || value instanceof Byte || value instanceof Short ) {
-                builder.add(fName, (int) value);
-            } else if (value instanceof Double || value instanceof Float ) {
-                builder.add(fName, (double)value);
+            } else if (value instanceof Number) {
+                builder.add(fName, Json.createValue(value.toString()));
             }
             else
                 builder.add(fName,getJsonObject(value));

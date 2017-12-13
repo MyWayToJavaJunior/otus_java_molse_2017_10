@@ -1,6 +1,6 @@
 package ru.otus.hw.factory;
 
-import ru.otus.hw.parser.impl.JavaxJsonAdapter;
+import ru.otus.hw.parser.impl.JavaxJsonParser;
 import ru.otus.hw.parser.JsonParser;
 
 public class JavaxJsonFactory extends Factory {
@@ -18,6 +18,6 @@ public class JavaxJsonFactory extends Factory {
 
     @Override
     public JsonParser createParser() {
-        return new JavaxJsonAdapter();
+        return new JavaxJsonParser();
     }
 }
