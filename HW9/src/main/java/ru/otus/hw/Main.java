@@ -1,9 +1,8 @@
 package ru.otus.hw;
 
 import ru.otus.hw.base.DBService;
+import ru.otus.hw.model.UserDataSet;
 import ru.otus.hw.service.DBServiceImpl;
-
-import java.util.List;
 
 public class Main {
 
@@ -12,16 +11,14 @@ public class Main {
     }
 
     private void run() throws Exception {
+        UserDataSet test = new UserDataSet("TEMP1111",25);
+
         try (DBService dbService = new DBServiceImpl()) {
             System.out.println(dbService.getMetaData());
-            dbService.getAllUsers();
-            /*dbService.addUsers("tully", "sully");
-            System.out.println("UserName with id = 1: " + dbService.getUserName(1));
-            List<String> names = dbService.getAllNames();
-            System.out.println("All names: " + names.toString());
-            List<UsersDataSet> users = dbService.getAllUsers();
-            System.out.println("All users: " + users.toString());
-            dbService.deleteTables();*/
+            dbService.save(test);
+            UserDataSet load = dbService.load(5, UserDataSet.class);
+            System.out.println(load);
+
         }
     }
 
