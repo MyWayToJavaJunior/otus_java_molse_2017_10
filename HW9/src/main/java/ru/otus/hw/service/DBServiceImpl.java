@@ -11,11 +11,13 @@ import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class DBServiceImpl implements DBService{
 
     private static final String SELECT_REQUEST = "select * from public.\"user\" where id = ";
+    private static final String INSERT_INTO ="INSERT INTO public.\"user\" ";
 
 
     private final Connection connection;
@@ -41,8 +43,31 @@ public class DBServiceImpl implements DBService{
     public <T extends DataSet> void save(T user) {
         try {
             Executor exec = new Executor(getConnection());
-            String s = StatementHelper.prepareInsertString(user);
-            exec.execUpdate(s, statement -> statement.execute(s));
+            Map<String,Object> fieldValue =  StatementHelper.prepareParametersMap(user);
+
+            String fields = fieldValue.entrySet()
+                    .stream()
+                    .map(Map.Entry::getKey)
+                    .collect(Collectors.joining(",","(",")"));
+
+            String questions = fieldValue.entrySet().stream()
+                    .map(Map.Entry::getValue)
+                    .map(str -> "?")
+                    .collect(Collectors.joining(",", " VALUES (", ")"));
+
+            String s = INSERT_INTO + fields + questions;
+
+            exec.execUpdate(s, statement -> {
+                List<Object> values = fieldValue.entrySet()
+                        .stream()
+                        .map(Map.Entry::getValue)
+                        .collect(Collectors.toList());
+
+                for (int i = 0; i < values.size(); i++) {
+                    statement.setObject(i + 1,values.get(i));
+                }
+                statement.execute();
+            });
         } catch (SQLException | IllegalAccessException e){
             e.printStackTrace();
         }
@@ -78,7 +103,7 @@ public class DBServiceImpl implements DBService{
 
     @Override
     public void close() throws Exception {
-
+        connection.close();
     }
 
     protected Connection getConnection() {

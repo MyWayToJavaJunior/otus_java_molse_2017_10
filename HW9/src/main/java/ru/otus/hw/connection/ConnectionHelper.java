@@ -10,7 +10,7 @@ public class ConnectionHelper {
         try {
             DriverManager.registerDriver(new org.postgresql.Driver());
 
-            String url = "jdbc:postgresql://localhost/otus?user=postgres&password=secret"; //Todo change pass
+            String url = "jdbc:postgresql://localhost/otus?user=postgres&password=secret";
 
 
             return DriverManager.getConnection(url);

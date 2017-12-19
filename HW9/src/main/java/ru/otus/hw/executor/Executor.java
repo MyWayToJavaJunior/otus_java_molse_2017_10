@@ -18,7 +18,7 @@ public class Executor {
     }
 
     public <T> void execUpdate(String update, TExecuteHandler<T> handler) throws SQLException {
-        try(Statement stmt = getConnection().createStatement()) {
+        try(PreparedStatement stmt = getConnection().prepareStatement(update)) {
             handler.accept(stmt);
             stmt.close();
         }

@@ -11,12 +11,12 @@ public class Main {
     }
 
     private void run() throws Exception {
-        UserDataSet test = new UserDataSet("TEMP1111",25);
+        UserDataSet test = new UserDataSet("XXXX",25);
 
         try (DBService dbService = new DBServiceImpl()) {
             System.out.println(dbService.getMetaData());
             dbService.save(test);
-            UserDataSet load = dbService.load(5, UserDataSet.class);
+            UserDataSet load = dbService.load(6, UserDataSet.class);
             System.out.println(load);
 
         }

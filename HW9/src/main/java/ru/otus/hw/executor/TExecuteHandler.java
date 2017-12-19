@@ -6,6 +6,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 @FunctionalInterface
-public interface TExecuteHandler<T> {
-    void accept(Statement statement) throws SQLException;
+public interface TExecuteHandler<T>  {
+    void accept(PreparedStatement statement) throws SQLException;
 }
