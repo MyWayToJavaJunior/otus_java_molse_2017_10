@@ -1,5 +1,6 @@
 package ru.otus.hw.utils;
 
+import ru.otus.hw.annotations.Entity;
 import ru.otus.hw.model.DataSet;
 
 import java.lang.reflect.Field;
@@ -24,6 +25,11 @@ public class StatementHelper {
         return fieldValuesMap;
     }
 
+    public static <T extends DataSet> String getTableName(Class<T> clazz) {
+        if (!clazz.isAnnotationPresent(Entity.class)) throw new RuntimeException("Данный класс не поддерживается");
+        Entity annotation = clazz.getAnnotation(Entity.class);
+        return annotation.name();
+    }
 
     public static <T> List<Field> getFieldsFromObj(T t) {
        return getFieldsFromClass(t.getClass());

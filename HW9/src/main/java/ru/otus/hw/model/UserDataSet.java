@@ -2,7 +2,9 @@ package ru.otus.hw.model;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import ru.otus.hw.annotations.Entity;
 
+@Entity(name = "user")
 public class UserDataSet extends DataSet {
     private String name;
     private int age;

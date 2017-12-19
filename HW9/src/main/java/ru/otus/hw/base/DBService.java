@@ -13,4 +13,8 @@ public interface DBService extends AutoCloseable {
     <T extends DataSet> void save(T user);
 
     <T extends DataSet> T load(long id, Class<T> clazz) throws IllegalAccessException;
+
+    <T extends DataSet> void deleteAll(Class<T> clazz) throws IllegalAccessException;
+
+
 }

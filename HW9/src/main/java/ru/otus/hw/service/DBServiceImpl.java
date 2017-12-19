@@ -1,5 +1,6 @@
 package ru.otus.hw.service;
 
+import ru.otus.hw.annotations.Entity;
 import ru.otus.hw.base.DBService;
 import ru.otus.hw.model.DataSet;
 import ru.otus.hw.connection.ConnectionHelper;
@@ -9,15 +10,17 @@ import ru.otus.hw.utils.StatementHelper;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static ru.otus.hw.utils.StatementHelper.getTableName;
+
 public class DBServiceImpl implements DBService{
 
-    private static final String SELECT_REQUEST = "select * from public.\"user\" where id = ";
-    private static final String INSERT_INTO ="INSERT INTO public.\"user\" ";
+    private static final String INSERT_INTO ="INSERT INTO public.\"";
 
 
     private final Connection connection;
@@ -44,6 +47,7 @@ public class DBServiceImpl implements DBService{
         try {
             Executor exec = new Executor(getConnection());
             Map<String,Object> fieldValue =  StatementHelper.prepareParametersMap(user);
+            String tableName = getTableName(user.getClass());
 
             String fields = fieldValue.entrySet()
                     .stream()
@@ -55,7 +59,7 @@ public class DBServiceImpl implements DBService{
                     .map(str -> "?")
                     .collect(Collectors.joining(",", " VALUES (", ")"));
 
-            String s = INSERT_INTO + fields + questions;
+            String s = INSERT_INTO + tableName + "\" " + fields + questions;
 
             exec.execUpdate(s, statement -> {
                 List<Object> values = fieldValue.entrySet()
@@ -75,11 +79,13 @@ public class DBServiceImpl implements DBService{
 
     @Override
     public <T extends DataSet> T load(long id, Class<T> clazz) {
+        String tableName = getTableName(clazz);
+        String selectRequest = "select * from public.\""+tableName+"\" where id = ";
         T user = ReflectionHelper.instantiate(clazz);
 
         try {
             Executor exec = new Executor(getConnection());
-            exec.execQuery(SELECT_REQUEST + id, result -> {
+            exec.execQuery(selectRequest + id, result -> {
                 result.next();
                 if (!result.isLast()) return user;
                 user.setId((long)result.getObject("id"));
@@ -98,6 +104,20 @@ public class DBServiceImpl implements DBService{
         }
 
         return user.getId() == 0 ? null : user;
+    }
+
+    @Override
+    public <T extends DataSet> void deleteAll(Class<T> clazz) throws IllegalAccessException {
+
+        String tableName = getTableName(clazz);
+        String deleteRequest = "DELETE FROM public.\""+tableName+"\"";
+        try {
+            Executor exec = new Executor(getConnection());
+            exec.execUpdate(deleteRequest, PreparedStatement::execute);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
     }
 
 

@@ -14,10 +14,11 @@ public class Main {
         UserDataSet test = new UserDataSet("XXXX",25);
 
         try (DBService dbService = new DBServiceImpl()) {
-            System.out.println(dbService.getMetaData());
+            /*System.out.println(dbService.getMetaData());
             dbService.save(test);
             UserDataSet load = dbService.load(6, UserDataSet.class);
-            System.out.println(load);
+            System.out.println(load);*/
+            dbService.deleteAll(UserDataSet.class);
 
         }
     }
