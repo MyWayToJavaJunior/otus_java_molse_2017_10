@@ -12,6 +12,7 @@ import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -80,12 +81,13 @@ public class DBServiceImpl implements DBService{
     @Override
     public <T extends DataSet> T load(long id, Class<T> clazz) {
         String tableName = getTableName(clazz);
-        String selectRequest = "select * from public.\""+tableName+"\" where id = ";
+        String selectRequest = "select * from public.\""+tableName+"\" where id = ?";
         T user = ReflectionHelper.instantiate(clazz);
-
+        Map<Integer,Object> params = new HashMap<>();
+        params.put(1,id);
         try {
             Executor exec = new Executor(getConnection());
-            exec.execQuery(selectRequest + id, result -> {
+            exec.execQuery(selectRequest, params, result -> {
                 result.next();
                 if (!result.isLast()) return user;
                 user.setId((long)result.getObject("id"));
