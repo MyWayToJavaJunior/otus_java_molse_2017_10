@@ -1,19 +1,20 @@
 package ru.otus.hw.utils;
 
-import ru.otus.hw.annotations.Entity;
 import ru.otus.hw.model.DataSet;
 
+import javax.persistence.Table;
 import java.lang.reflect.Field;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class StatementHelper {
 
     public static <T extends DataSet> Map<String,Object> prepareParametersMap(T user) throws IllegalAccessException {
 
         Map<String,Object> fieldValuesMap = new HashMap<>();
-        List<String> fields = new ArrayList<>();
-        List<String> values = new ArrayList<>();
         List<Field> declaredFields = getFieldsFromObj(user);
         for (Field field: declaredFields) {
             String fName = field.getName();
@@ -26,8 +27,8 @@ public class StatementHelper {
     }
 
     public static <T extends DataSet> String getTableName(Class<T> clazz) {
-        if (!clazz.isAnnotationPresent(Entity.class)) throw new RuntimeException("Данный класс не поддерживается");
-        Entity annotation = clazz.getAnnotation(Entity.class);
+        if (!clazz.isAnnotationPresent(Table.class)) throw new RuntimeException("Данный класс не поддерживается");
+        Table annotation = clazz.getAnnotation(Table.class);
         return annotation.name();
     }
 

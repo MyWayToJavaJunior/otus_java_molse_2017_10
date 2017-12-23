@@ -12,16 +12,13 @@ public class Executor {
 
     public <T> T execQuery(String query, Map<Integer,Object> params, TResultHandler<T> handler) throws SQLException, IllegalAccessException {
         try(PreparedStatement stmt = connection.prepareStatement(query)) {
-            params.forEach((index, value) -> {
-                try {
-                    stmt.setObject(index, value);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            });
+            for(Map.Entry<Integer, Object> param: params.entrySet()) {
+                stmt.setObject(param.getKey(), param.getValue());
+            }
             stmt.execute();
-            ResultSet result = stmt.getResultSet();
-            return handler.handle(result);
+            try (ResultSet result = stmt.getResultSet()) {
+                return handler.handle(result);
+            }
         }
     }
 

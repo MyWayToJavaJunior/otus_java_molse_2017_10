@@ -1,6 +1,5 @@
 package ru.otus.hw.service;
 
-import ru.otus.hw.annotations.Entity;
 import ru.otus.hw.base.DBService;
 import ru.otus.hw.model.DataSet;
 import ru.otus.hw.connection.ConnectionHelper;
@@ -21,7 +20,7 @@ import static ru.otus.hw.utils.StatementHelper.getTableName;
 
 public class DBServiceImpl implements DBService{
 
-    private static final String INSERT_INTO ="INSERT INTO public.\"";
+    private static final String INSERT_INTO ="INSERT INTO ";
 
 
     private final Connection connection;
@@ -60,7 +59,7 @@ public class DBServiceImpl implements DBService{
                     .map(str -> "?")
                     .collect(Collectors.joining(",", " VALUES (", ")"));
 
-            String s = INSERT_INTO + tableName + "\" " + fields + questions;
+            String s = INSERT_INTO + tableName + " " + fields + questions;
 
             exec.execUpdate(s, statement -> {
                 List<Object> values = fieldValue.entrySet()
@@ -81,7 +80,7 @@ public class DBServiceImpl implements DBService{
     @Override
     public <T extends DataSet> T load(long id, Class<T> clazz) {
         String tableName = getTableName(clazz);
-        String selectRequest = "select * from public.\""+tableName+"\" where id = ?";
+        String selectRequest = "select * from "+tableName+" where id = ?";
         T user = ReflectionHelper.instantiate(clazz);
         Map<Integer,Object> params = new HashMap<>();
         params.put(1,id);
@@ -112,7 +111,7 @@ public class DBServiceImpl implements DBService{
     public <T extends DataSet> void deleteAll(Class<T> clazz) throws IllegalAccessException {
 
         String tableName = getTableName(clazz);
-        String deleteRequest = "DELETE FROM public.\""+tableName+"\"";
+        String deleteRequest = "DELETE FROM "+tableName+" ";
         try {
             Executor exec = new Executor(getConnection());
             exec.execUpdate(deleteRequest, PreparedStatement::execute);

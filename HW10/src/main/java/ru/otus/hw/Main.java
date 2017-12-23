@@ -1,9 +1,13 @@
 package ru.otus.hw;
 
 import ru.otus.hw.base.DBService;
+import ru.otus.hw.model.AddressDataSet;
+import ru.otus.hw.model.PhoneDataSet;
 import ru.otus.hw.model.UserDataSet;
 import ru.otus.hw.service.DBServiceHibernateImpl;
 import ru.otus.hw.service.DBServiceImpl;
+
+import java.util.Collections;
 
 public class Main {
 
@@ -12,14 +16,12 @@ public class Main {
     }
 
     private void run() throws Exception {
-        UserDataSet test = new UserDataSet("XXXX",25);
+
 
         try (DBService dbService = new DBServiceHibernateImpl()) {
-            dbService.save(test);
-            /*System.out.println(dbService.getMetaData());
-            dbService.save(test);
-            UserDataSet load = dbService.load(6, UserDataSet.class);
-            System.out.println(load);*/
+            dbService.save(new UserDataSet("Иванов Иван",25, new AddressDataSet("Тверская"), Collections.singleton(new PhoneDataSet("111111111"))));
+            UserDataSet load = dbService.load(1, UserDataSet.class);
+            System.out.println(load);
             //dbService.deleteAll(UserDataSet.class);
 
         }

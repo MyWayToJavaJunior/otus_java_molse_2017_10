@@ -3,24 +3,48 @@ package ru.otus.hw.model;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Collections;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
 public class UserDataSet extends DataSet {
+
+    @Column(name = "user_id")
+    private long id;
+
     @Column(name = "name")
     private String name;
     @Column(name = "age")
     private int age;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private AddressDataSet address;
+
+    @OneToMany(mappedBy="user", fetch = FetchType.EAGER)
+    private Set<PhoneDataSet> phone;
+
     public UserDataSet() {
     }
 
     public UserDataSet(String name, int age) {
+        this.phone = Collections.emptySet();
         this.name = name;
         this.age = age;
+    }
+
+    public UserDataSet(String name, int age, AddressDataSet address) {
+        this.name = name;
+        this.age = age;
+        this.address = address;
+    }
+
+    public UserDataSet(String name, int age, AddressDataSet address, Set<PhoneDataSet> phone) {
+        this.name = name;
+        this.age = age;
+        this.address = address;
+        this.phone = phone;
     }
 
     public String getName() {
@@ -39,6 +63,21 @@ public class UserDataSet extends DataSet {
         this.age = age;
     }
 
+    public AddressDataSet getAddress() {
+        return address;
+    }
+
+    public void setAddress(AddressDataSet address) {
+        this.address = address;
+    }
+
+    public Set<PhoneDataSet> getPhone() {
+        return phone;
+    }
+
+    public void setPhone(Set<PhoneDataSet> phone) {
+        this.phone = phone;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -67,8 +106,11 @@ public class UserDataSet extends DataSet {
     @Override
     public String toString() {
         return "UserDataSet{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", age=" + age +
+                ", address=" + address +
+                ", phone=" + phone +
                 '}';
     }
 }
