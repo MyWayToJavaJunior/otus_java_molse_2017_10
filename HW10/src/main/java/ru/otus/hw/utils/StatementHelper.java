@@ -20,7 +20,7 @@ public class StatementHelper {
             String fName = field.getName();
             field.setAccessible(true);
             Object value = field.get(user);
-            if (fName.toString().equals("id") && user.getId() == 0) continue;
+            if (fName.equals("id") && user.getId() == 0) continue;
             fieldValuesMap.put(fName,value);
         }
         return fieldValuesMap;

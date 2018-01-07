@@ -1,10 +1,7 @@
 package ru.otus.hw.service;
 
 import org.hibernate.*;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
-import org.hibernate.service.ServiceRegistry;
 import ru.otus.hw.base.DBService;
 import ru.otus.hw.connection.ConnectionHelper;
 import ru.otus.hw.model.DataSet;

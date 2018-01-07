@@ -3,9 +3,15 @@ package ru.otus.hw.model;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.CascadeType;
+import javax.persistence.OneToMany;
 import java.util.Collections;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -22,14 +28,15 @@ public class UserDataSet extends DataSet {
     @OneToOne(cascade = CascadeType.ALL)
     private AddressDataSet address;
 
-    @OneToMany(mappedBy="user", fetch = FetchType.EAGER)
-    private Set<PhoneDataSet> phone;
+    @OneToMany(cascade = CascadeType.ALL,
+            mappedBy = "user", orphanRemoval = true)
+    private List<PhoneDataSet> phone;
 
     public UserDataSet() {
     }
 
     public UserDataSet(String name, int age) {
-        this.phone = Collections.emptySet();
+        this.phone = Collections.emptyList();
         this.name = name;
         this.age = age;
     }
@@ -40,11 +47,11 @@ public class UserDataSet extends DataSet {
         this.address = address;
     }
 
-    public UserDataSet(String name, int age, AddressDataSet address, Set<PhoneDataSet> phone) {
+    public UserDataSet(String name, int age, AddressDataSet address, List<PhoneDataSet> phone) {
         this.name = name;
         this.age = age;
         this.address = address;
-        this.phone = phone;
+        setPhone(phone);
     }
 
     public String getName() {
@@ -71,12 +78,15 @@ public class UserDataSet extends DataSet {
         this.address = address;
     }
 
-    public Set<PhoneDataSet> getPhone() {
+    public List<PhoneDataSet> getPhone() {
         return phone;
     }
 
-    public void setPhone(Set<PhoneDataSet> phone) {
+    public void setPhone(List<PhoneDataSet> phone) {
         this.phone = phone;
+        for(PhoneDataSet p : phone ){
+            p.setUser(this);
+        }
     }
 
     @Override

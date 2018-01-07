@@ -8,8 +8,7 @@ public class PhoneDataSet extends DataSet {
     @Column(name = "number")
     private String number;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="user_id", nullable=false)
+    @ManyToOne
     private UserDataSet user;
 
     public PhoneDataSet() {
