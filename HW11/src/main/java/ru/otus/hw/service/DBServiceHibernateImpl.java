@@ -13,6 +13,7 @@ import ru.otus.hw.service.dao.UserDataSetDAO;
 
 
 import java.lang.ref.SoftReference;
+import java.time.ZonedDateTime;
 import java.util.function.Function;
 
 
@@ -22,7 +23,7 @@ public class DBServiceHibernateImpl implements DBService {
 
     public DBServiceHibernateImpl() {
         sessionFactory = ConnectionHelper.getHibernateSessionFactory();
-        cache = new CacheEngineImpl<>(5, 1000, 0, true);
+        cache = new CacheEngineImpl<>(5, 3000, 0, false);
     }
 
     @Override
@@ -49,6 +50,8 @@ public class DBServiceHibernateImpl implements DBService {
         return runInSession(session -> {
             UserDataSetDAO dao = new UserDataSetDAO(session);
             T user = (T) dao.read(id);
+            System.out.println("Cache hit = " +  cache.getHitCount());
+            System.out.println("Cache miss = " + cache.getMissCount());
             cache.put(new MyElement<>(Long.valueOf(id),new SoftReference<>(user)));
             return user;
         });

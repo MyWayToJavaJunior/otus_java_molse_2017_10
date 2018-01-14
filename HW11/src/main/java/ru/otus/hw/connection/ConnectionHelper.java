@@ -23,9 +23,9 @@ public class ConnectionHelper {
        configuration.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/otus?serverTimezone=Europe/Moscow");
        configuration.setProperty("hibernate.connection.username", "root");
        configuration.setProperty("hibernate.connection.password", "root");
-       configuration.setProperty("hibernate.show_sql", "true");
-       configuration.setProperty("hibernate.format_sql", "true");
-       configuration.setProperty("hibernate.comment_sql", "true");
+       configuration.setProperty("hibernate.show_sql", "false");
+       configuration.setProperty("hibernate.format_sql", "false");
+       configuration.setProperty("hibernate.comment_sql", "false");
        configuration.setProperty("hibernate.hbm2ddl.auto", "create");
        configuration.setProperty("hibernate.connection.useSSL", "false");
        configuration.setProperty("hibernate.enable_lazy_load_no_trans", "true");
