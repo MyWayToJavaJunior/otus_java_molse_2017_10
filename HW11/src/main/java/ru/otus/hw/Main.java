@@ -21,13 +21,27 @@ public class Main {
         try (DBService dbService = new DBServiceHibernateImpl()) {
 
             dbService.save(new UserDataSet("Иванов Иван",25, new AddressDataSet("Тверская"), Collections.singletonList(new PhoneDataSet("111111111"))));
-            while (true) {
+            //System.out.println(load);
+            /*while (true) {
                 UserDataSet load = dbService.load(1, UserDataSet.class);
                 Thread.sleep(100);
                 UserDataSet load2 = dbService.load(1, UserDataSet.class);
                 UserDataSet load3 = dbService.load(1, UserDataSet.class);
-            }
-            //System.out.println(load);
+                dbService.deleteAll(UserDataSet.class);
+                UserDataSet load4 = dbService.load(1, UserDataSet.class);
+                System.out.println(load4);
+                dbService.save(new UserDataSet("Иванов Иван",25, new AddressDataSet("Тверская"), Collections.singletonList(new PhoneDataSet("111111111"))));
+            }*/
+
+            UserDataSet load = dbService.load(1, UserDataSet.class);
+            Thread.sleep(100);
+            UserDataSet load2 = dbService.load(1, UserDataSet.class);
+            UserDataSet load3 = dbService.load(1, UserDataSet.class);
+            dbService.deleteAll(UserDataSet.class);
+            dbService.save(new UserDataSet("Иванов Иван",25, new AddressDataSet("Тверская"), Collections.singletonList(new PhoneDataSet("111111111"))));
+            UserDataSet load4 = dbService.load(2, UserDataSet.class);
+            System.out.println(load4);
+            dbService.save(new UserDataSet("Иванов Иван",25, new AddressDataSet("Тверская"), Collections.singletonList(new PhoneDataSet("111111111"))));
 
 
 

@@ -15,4 +15,6 @@ public interface CacheEngine<K, V> {
 
     void dispose();
 
+    void clean();
+
 }

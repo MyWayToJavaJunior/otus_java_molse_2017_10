@@ -71,9 +71,16 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
         return miss;
     }
 
+
+
     @Override
     public void dispose() {
         timer.cancel();
+    }
+
+    @Override
+    public void clean() {
+        elements.clear();
     }
 
     private TimerTask getTimerTask(final K key, Function<MyElement<K, V>, Long> timeFunction) {

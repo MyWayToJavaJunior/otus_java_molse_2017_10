@@ -10,6 +10,7 @@ import ru.otus.hw.connection.ConnectionHelper;
 import ru.otus.hw.model.DataSet;
 import ru.otus.hw.model.UserDataSet;
 import ru.otus.hw.service.dao.UserDataSetDAO;
+import ru.otus.hw.utils.ReflectionHelper;
 
 
 import java.lang.ref.SoftReference;
@@ -37,6 +38,10 @@ public class DBServiceHibernateImpl implements DBService {
             UserDataSetDAO dao = new UserDataSetDAO(session);
             dao.save((UserDataSet) user);
         }
+
+        Object id = ReflectionHelper.getFieldValue(user, "id");
+        cache.put(new MyElement<>((long)ReflectionHelper.getFieldValue(user, "id"), new SoftReference<>(user)));
+
     }
 
     @Override
@@ -47,14 +52,17 @@ public class DBServiceHibernateImpl implements DBService {
             SoftReference<T> value = (SoftReference<T>) longObjectMyElement.getValue();
             if (value != null) return value.get();
         }
-        return runInSession(session -> {
+
+        T userFromBase = runInSession(session -> {
             UserDataSetDAO dao = new UserDataSetDAO(session);
             T user = (T) dao.read(id);
-            System.out.println("Cache hit = " +  cache.getHitCount());
-            System.out.println("Cache miss = " + cache.getMissCount());
-            cache.put(new MyElement<>(Long.valueOf(id),new SoftReference<>(user)));
             return user;
         });
+        System.out.println("Cache hit = " + cache.getHitCount());
+        System.out.println("Cache miss = " + cache.getMissCount());
+        cache.put(new MyElement<>(Long.valueOf(id), new SoftReference<>(userFromBase)));
+
+        return userFromBase;
     }
 
     @Override
@@ -66,6 +74,7 @@ public class DBServiceHibernateImpl implements DBService {
             query.executeUpdate();
             transaction.commit();
         }
+        cache.clean();
     }
 
     @Override
