@@ -14,7 +14,6 @@ import ru.otus.hw.utils.ReflectionHelper;
 
 
 import java.lang.ref.SoftReference;
-import java.time.ZonedDateTime;
 import java.util.function.Function;
 
 
@@ -75,6 +74,11 @@ public class DBServiceHibernateImpl implements DBService {
             transaction.commit();
         }
         cache.clean();
+    }
+
+
+    public CacheEngine<Long, Object> getCache() {
+        return cache;
     }
 
     @Override
