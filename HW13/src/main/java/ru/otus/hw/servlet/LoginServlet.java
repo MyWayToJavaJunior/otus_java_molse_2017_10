@@ -29,6 +29,12 @@ public class LoginServlet extends HttpServlet {
 
     }
 
+    public void doGet(HttpServletRequest request,
+                       HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("teeeeeeeeest");
+
+    }
+
     private void saveToCookie(HttpServletResponse response, String requestLogin) {
         response.addCookie(new Cookie("MOLSE", requestLogin));
     }

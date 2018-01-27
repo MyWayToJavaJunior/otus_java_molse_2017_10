@@ -1,7 +1,9 @@
 package ru.otus.hw.base;
 
+import org.springframework.stereotype.Component;
 import ru.otus.hw.model.DataSet;
 
+@Component
 public interface DBService extends AutoCloseable {
 
     String getMetaData();

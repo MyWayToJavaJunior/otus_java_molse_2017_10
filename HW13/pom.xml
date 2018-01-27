@@ -14,6 +14,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <servlet.version>3.1.0</servlet.version>
+        <spring.version>5.0.3.RELEASE</spring.version>
         <!--<jetty.version>9.4.8.v20171121</jetty.version>-->
         <com.google.guava.version>23.0</com.google.guava.version>
     </properties>
@@ -65,55 +67,52 @@
             <artifactId>freemarker</artifactId>
             <version>2.3.20</version>
         </dependency>
-
-        <!--<dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-server</artifactId>
-            <version>${jetty.version}</version>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servlet.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-webapp</artifactId>
-            <version>${jetty.version}</version>
-        </dependency>-->
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
 
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>spring-web</artifactId>
+            <groupId>org.springframework</groupId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.7.4</version>
+        </dependency>
     </dependencies>
     <build>
-        <finalName>${project.name}</finalName>
+        <finalName>otus</finalName>
+
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
+                <artifactId>maven-war-plugin</artifactId>
                 <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>ru.otus.hw.Main</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>my-maven-assembly-plugin</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <archive>
-                        <manifest>
-                            <mainClass>ru.otus.hw.Main</mainClass>
-                        </manifest>
-                    </archive>
+                    <webXml>src/main/resources/WEB-INF/web.xml</webXml>
+                    <webResources>
+                        <resource>
+                            <directory>public_html</directory>
+                        </resource>
+                    </webResources>
                 </configuration>
             </plugin>
         </plugins>

@@ -2,6 +2,7 @@ package ru.otus.hw.service;
 
 import org.hibernate.*;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Component;
 import ru.otus.hw.base.DBService;
 import ru.otus.hw.cache.CacheEngine;
 import ru.otus.hw.cache.CacheEngineImpl;
@@ -16,7 +17,7 @@ import ru.otus.hw.utils.ReflectionHelper;
 import java.lang.ref.SoftReference;
 import java.util.function.Function;
 
-
+@Component
 public class DBServiceHibernateImpl implements DBService {
     private final SessionFactory sessionFactory;
     private final CacheEngine<Long, Object> cache;
