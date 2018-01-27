@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <title>Cache Engine</title>
+</head>
+<body>
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Параметры кэширования</a>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+
+            </ul>
+        </div>
+    </nav>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <p>Попадания в кэш: ${hit}</p>
+
+            <p>Промах мимо кэша: ${miss}</p>
+            <p>Количество элементов: ${maxElements}</p>
+
+        </div>
+    </div>
+
+</div>
+
+<script src="js/jquery-3.3.0.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>
